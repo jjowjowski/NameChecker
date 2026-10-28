@@ -1,0 +1,18 @@
+# Railway config-as-code (TOML instead of railway.json so it can carry comments).
+
+[deploy]
+startCommand = "python main.py --scheduled"
+# A cron service must run to completion and exit; never restart it.
+restartPolicyType = "NEVER"
+
+# Goal: every Monday at 09:00 New Zealand time. Railway cron is always UTC, and
+# NZ shifts between two offsets:
+#   NZDT (UTC+13, late Sep to early Apr): Mon 09:00 NZ = Sun 20:00 UTC
+#   NZST (UTC+12, early Apr to late Sep): Mon 09:00 NZ = Sun 21:00 UTC
+# A single fixed UTC time would be an hour off for half the year, so the job
+# fires at BOTH 20:00 and 21:00 UTC on Sundays. With --scheduled, main.py checks
+# the real Pacific/Auckland time and only does the work in the run that lands in
+# the 09:00 hour; the other run exits within seconds. That stays correct across
+# DST changes without editing the schedule. (NZ changes clocks early on a Sunday
+# morning, long before these runs, so there is never a double or missed run.)
+cronSchedule = "0 20,21 * * 0"

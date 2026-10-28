@@ -1,0 +1,7 @@
+anthropic>=2.3,<3
+beautifulsoup4>=4.12,<5
+feedparser>=6.0,<7
+gspread>=6.1,<7
+pypdf>=5.0,<7
+requests>=2.32,<3
+tzdata>=2024.1
